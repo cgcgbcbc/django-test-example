@@ -13,8 +13,8 @@ class TestFetchTicket(TestCase):
     def test_fetch_ticket(self):
         request = HttpRequest()
         response = fetch_ticket(request)
-        self.assertEqual(response.content, '成功'.encode('utf-8'))
+        self.assertEqual(response.content.decode(), '成功')
 
         request = HttpRequest()
         response = fetch_ticket(request)
-        self.assertEqual(response.content, '失败'.encode('utf-8'))
+        self.assertEqual(response.content.decode(), '失败')
