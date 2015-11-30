@@ -10,4 +10,4 @@ class TestFetchTicket(TestCase):
     def test_fetch_ticket(self):
         request = HttpRequest()
         response = fetch_ticket(request)
-        self.assertEqual(response.content, '成功')
+        self.assertEqual(response.content, '成功'.encode('utf-8'))
