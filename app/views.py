@@ -31,11 +31,12 @@ def fetch_ticket(request: HttpRequest) -> HttpResponse:
 def wechat_handler(request: HttpRequest):
     data = ET.fromstring(request.body.decode())
     content = data.findtext('Content')
+    from_user_name = data.findtext('FromUserName')
     if content == '抢票':
         return HttpResponse(TEXT_TPL % {
             'content': fetch_ticket(request).content.decode(),
             'from_user_name': 'from',
-            'to_user_name': 'to',
+            'to_user_name': from_user_name,
             'create_time': time.time(),
         }, content_type='text/xml')
     return HttpResponse('<xml></xml>', content_type='text/xml')
