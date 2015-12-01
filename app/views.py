@@ -23,9 +23,9 @@ def fetch_ticket(request: HttpRequest) -> HttpResponse:
     if activity.remain_ticket > 0:
         activity.remain_ticket -= 1
         activity.save()
-        return HttpResponse('成功', content_type='text/plain')
+        return '成功'
     else:
-        return HttpResponse('失败', content_type='text/plain')
+        return '失败'
 
 
 def wechat_handler(request: HttpRequest):
@@ -34,7 +34,7 @@ def wechat_handler(request: HttpRequest):
     from_user_name = data.findtext('FromUserName')
     if content == '抢票':
         return HttpResponse(TEXT_TPL % {
-            'content': fetch_ticket(request).content.decode(),
+            'content': fetch_ticket(request),
             'from_user_name': 'from',
             'to_user_name': from_user_name,
             'create_time': time.time(),
