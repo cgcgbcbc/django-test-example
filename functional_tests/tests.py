@@ -1,13 +1,15 @@
 # coding=utf-8
-__author__ = 'guangchen'
 
 from django.test import TestCase
 from support import WechatClient
-
 import xml.etree.cElementTree as ET
+
+__author__ = 'guangchen'
 
 
 class TestExample(TestCase):
+    fixtures = ['activity.yaml']
+
     def setUp(self):
         self.client = WechatClient(wechat_url='/wechat/')
 
@@ -15,4 +17,5 @@ class TestExample(TestCase):
         response = self.client.send_wechat_text('抢票')
         self.assertEqual(response.status_code, 200)
         msg = ET.fromstring(response.content.decode())
-        # TODO add assert.
+        msg_content = msg.findtext('Content')
+        self.assertEqual(msg_content, '成功')
