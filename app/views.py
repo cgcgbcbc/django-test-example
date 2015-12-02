@@ -3,7 +3,7 @@ from django.http import HttpRequest, HttpResponse
 from django.shortcuts import render
 
 # Create your views here.
-from app.models import Activity
+from app.models import Activity, Ticket
 import xml.etree.cElementTree as ET
 
 
@@ -18,11 +18,13 @@ TEXT_TPL = '''
 '''
 
 
-def fetch_ticket(request: HttpRequest) -> HttpResponse:
+def fetch_ticket(user: str) -> str:
     activity = Activity.objects.get()
     if activity.remain_ticket > 0:
         activity.remain_ticket -= 1
         activity.save()
+        ticket = Ticket.objects.create(activity=activity, user=user)
+        ticket.save()
         return '成功'
     else:
         return '失败'
@@ -34,7 +36,7 @@ def wechat_handler(request: HttpRequest):
     from_user_name = data.findtext('FromUserName')
     if content == '抢票':
         return HttpResponse(TEXT_TPL % {
-            'content': fetch_ticket(request),
+            'content': fetch_ticket(from_user_name),
             'from_user_name': 'from',
             'to_user_name': from_user_name,
             'create_time': time.time(),
