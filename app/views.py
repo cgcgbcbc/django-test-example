@@ -4,6 +4,8 @@ from django.db import transaction
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import render
 # Create your views here.
+from django.views.decorators.csrf import csrf_exempt
+
 from app.models import Activity, Ticket
 import xml.etree.cElementTree as ET
 
@@ -31,6 +33,7 @@ def fetch_ticket(user: str) -> str:
         return '失败'
 
 
+@csrf_exempt
 def wechat_handler(request: HttpRequest):
     data = ET.fromstring(request.body.decode())
     content = data.findtext('Content')
