@@ -1,0 +1,4 @@
+- model: app.activity
+  pk: 1
+  fields:
+    remain_ticket: 1000
