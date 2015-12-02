@@ -1,11 +1,11 @@
 import time
+
+from django.db import transaction
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import render
-
 # Create your views here.
 from app.models import Activity, Ticket
 import xml.etree.cElementTree as ET
-
 
 TEXT_TPL = '''
 <xml>
@@ -18,8 +18,9 @@ TEXT_TPL = '''
 '''
 
 
+@transaction.atomic()
 def fetch_ticket(user: str) -> str:
-    activity = Activity.objects.get()
+    activity = Activity.objects.select_for_update().get()
     if activity.remain_ticket > 0:
         activity.remain_ticket -= 1
         activity.save()
